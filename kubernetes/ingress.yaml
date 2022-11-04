@@ -14,6 +14,9 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.org/server-snippets: gzip on;
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header X-Request-Time $request_time;
+      more_set_headers "X-Upstream-Addr: $upstream_addr";
 spec:
   rules:
     - host: rest-api-test.early-birds.io
