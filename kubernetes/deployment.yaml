@@ -20,6 +20,9 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
+          env:
+            - name: TIMEOUT_MS
+              value: "200"
           resources:
             limits:
               cpu: "1"

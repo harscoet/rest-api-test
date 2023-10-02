@@ -6,15 +6,13 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "fmt": "prettier -w ."
+    "fmt": "prettier -w .",
+    "docker": "docker build . -t eu.gcr.io/eb-main-2013/rest-api-test:latest && docker push eu.gcr.io/eb-main-2013/rest-api-test:latest"
   },
   "license": "ISC",
   "dependencies": {
-    "@early-birds/protobuf-js": "^3.0.0",
     "@grpc/grpc-js": "^1.8.15",
-    "axios": "^1.4.0",
     "dotenv": "^16.1.4",
-    "keycloak-connect": "^21.1.1",
     "koa": "^2.13.4"
   },
   "devDependencies": {

@@ -9,8 +9,8 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "1"
     nginx.ingress.kubernetes.io/proxy-next-upstream: error http_503 http_429 non_idempotent
     nginx.ingress.kubernetes.io/proxy-next-upstream-tries: "5"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "5"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "5"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "1"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.org/server-snippets: gzip on;
