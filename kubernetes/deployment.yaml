@@ -23,6 +23,10 @@ spec:
           env:
             - name: TIMEOUT_MS
               value: "200"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://quickwit-indexer.quickwit:7281"
+            - name: OTEL_EXPORTER_OTLP_COMPRESSION
+              value: "gzip"
           resources:
             limits:
               cpu: "1"

@@ -1,22 +1,16 @@
+const SERVICE_NAME = "rest-api-test";
+
 const { setupTracing } = require("./tracer");
-setupTracing("rest-api-test");
+setupTracing(SERVICE_NAME);
+
+const { setupLogger } = require("./logger");
+const logger = setupLogger(SERVICE_NAME);
 
 const api = require("@opentelemetry/api");
-const winston = require("winston");
 const Koa = require("koa");
 const app = new Koa();
 const { setTimeout } = require("node:timers/promises");
 const { PORT, TIMEOUT_MS } = require("./config");
-
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.json(),
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.simple(),
-    }),
-  ],
-});
 
 app.use(async (ctx, next) => {
   const currentSpan = api.trace.getSpan(api.context.active());

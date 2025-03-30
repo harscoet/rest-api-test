@@ -1,12 +1,12 @@
 const api = require("@opentelemetry/api");
-const { HttpInstrumentation } = require("@opentelemetry/instrumentation-http");
-const { KoaInstrumentation } = require("@opentelemetry/instrumentation-koa");
+const {
+  getNodeAutoInstrumentations,
+} = require("@opentelemetry/auto-instrumentations-node");
 const {
   NodeTracerProvider,
   SimpleSpanProcessor,
 } = require("@opentelemetry/sdk-trace-node");
 const { ATTR_SERVICE_NAME } = require("@opentelemetry/semantic-conventions");
-const { CompressionAlgorithm } = require("@opentelemetry/otlp-exporter-base");
 const {
   OTLPTraceExporter,
 } = require("@opentelemetry/exporter-trace-otlp-grpc");
@@ -20,16 +20,13 @@ function setupTracing(serviceName) {
     }),
     spanProcessors: [
       new SimpleSpanProcessor(
-        new OTLPTraceExporter({
-          url: "http://localhost:7281",
-          compression: CompressionAlgorithm.GZIP,
-        })
+        new OTLPTraceExporter()
       ),
     ],
   });
 
   registerInstrumentations({
-    instrumentations: [new KoaInstrumentation(), new HttpInstrumentation()], 
+    instrumentations: [getNodeAutoInstrumentations()],
     tracerProvider: provider,
   });
 
