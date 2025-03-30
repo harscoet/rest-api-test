@@ -1,15 +1,31 @@
-require("dotenv").config();
+const { setupTracing } = require("./tracer");
+setupTracing("rest-api-test");
 
+const api = require("@opentelemetry/api");
+const winston = require("winston");
 const Koa = require("koa");
 const app = new Koa();
 const { setTimeout } = require("node:timers/promises");
+const { PORT, TIMEOUT_MS } = require("./config");
 
-const TIMEOUT_MS = process.env.TIMEOUT_MS
-  ? parseInt(process.env.TIMEOUT_MS, 10)
-  : 120 * 1000;
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    }),
+  ],
+});
 
 app.use(async (ctx, next) => {
-  console.log('url', ctx.url, ctx.request.headers);
+  const currentSpan = api.trace.getSpan(api.context.active());
+
+  if (currentSpan) {
+    currentSpan.updateName("Error handling");
+  }
+
+  logger.info("Request received", { url: ctx.url, headers: ctx.request.headers });
 
   try {
     await next();
@@ -24,6 +40,12 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx) => {
+  const currentSpan = api.trace.getSpan(api.context.active());
+
+  if (currentSpan) {
+    currentSpan.updateName("Routing");
+  }
+
   if (ctx.query.status) {
     ctx.status = parseInt(ctx.query.status, 10);
   } else if (ctx.query.randstatus !== undefined) {
@@ -40,7 +62,7 @@ app.use(async (ctx) => {
 
   if (ctx.query.sleep) {
     const sleepTime = parseInt(ctx.query.sleep, 10);
-  
+
     if (ctx.query.randsleep) {
       if (Math.random() < 0.5) {
         await setTimeout(sleepTime);
@@ -56,8 +78,8 @@ app.use(async (ctx) => {
   };
 });
 
-const server = app.listen(3000, () => {
-  console.log("Listening...");
+const server = app.listen(PORT, () => {
+  console.log(`Listening on http://localhost:${PORT}`);
 });
 
 server.timeout = TIMEOUT_MS;

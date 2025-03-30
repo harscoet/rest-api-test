@@ -1,0 +1,17 @@
+services:
+  quickwit:
+    image: quickwit/quickwit
+    command: run
+    ports:
+      - "7280:7280"
+      - "7281:7281"
+  jaeger:
+    image: jaegertracing/jaeger-query
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    environment:
+      - LOG_LEVEL=debug
+      - SPAN_STORAGE_TYPE=grpc
+      - GRPC_STORAGE_SERVER=quickwit:7281
