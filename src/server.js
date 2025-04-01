@@ -1,7 +1,5 @@
 const SERVICE_NAME = "rest-api-test";
-
-const { setupTracing } = require("./tracer");
-setupTracing(SERVICE_NAME);
+setupOpentelemetry(SERVICE_NAME);
 
 const { setupLogger } = require("./logger");
 const logger = setupLogger(SERVICE_NAME);
