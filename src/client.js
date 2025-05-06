@@ -13,9 +13,7 @@ function makeRequest() {
   api.context.with(api.trace.setSpan(api.ROOT_CONTEXT, span), async () => {
     try {
       //const res = await axios.get(`http://localhost:${PORT}/run_test`);
-      const res = await axios.get(
-        `http://localhost:8080/widget/667c4b37f05dd936602dd703/recommendations/tealiumvid/018efb6b1fb7001ea70a212816ff0508b020108300536?variables=%7B%22%24productId%22%3A%22000QF7060EP7A%22%7D&nocache=1`
-      );
+      const res = await axios.get(process.env.URL);
       span.setStatus({ code: api.SpanStatusCode.OK });
       console.log(res.statusText);
     } catch (e) {
